@@ -38,7 +38,11 @@ class GamesController < ApplicationController
         point = rand(total_weight)
         elements.each do |element|
           point -= element[:weight]
-          break element[:letter] if point < 0 # use break instead of return to output an array and not a string
+          break element[:letter] if point < 0
+          # break allows you to exit
+          # the each loop and immediately return the selected letter.
+          # return would have exited the entire method,
+          # but we use break to only exit the loop.
         end
       end
     end
@@ -48,5 +52,11 @@ class GamesController < ApplicationController
   end
 
   def score
+    @submitted_word = params[:word]
+    url = "https://dictionary.lewagon.com/#{@submitted_word}"
+
+    response = URI.open(url).read # Effectue la requête et récupère la réponse en chaîne de caractères
+    @json_response = JSON.parse(response) # Parse la réponse JSON en hash
+
   end
 end
